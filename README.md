@@ -46,7 +46,8 @@ Generates:
 
 **Usage:**
 ```
-python AF3-PAE.py --data_file model_full_data_0.json --pdb_file model.pdb```
+	python AF3-PAE.py --data_file model_full_data_0.json --pdb_file model.pdb
+```
 
 ### `AF3-plddt.py`
 
@@ -59,7 +60,8 @@ Generates:
 **Usage:**
 
 ```
-python AF3-plddt.py --pdb_file model.pdb```
+	python AF3-plddt.py --pdb_file model.pdb
+```
 
 ### `AF3-plddt-colored.py`
 
@@ -79,7 +81,8 @@ Very High (90–100) Blue
 Usage:
 
 ```
-python AF3-plddt-colored.py --pdb_file model.pdb --out_prefix model```
+	python AF3-plddt-colored.py --pdb_file model.pdb --out_prefix model
+```
 
 Recommended to use these scripts by creating a conda environment.
 ```
