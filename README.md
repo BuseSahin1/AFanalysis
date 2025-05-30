@@ -88,4 +88,3 @@ Recommended to use these scripts by creating a conda environment.
 	conda install -c schrodinger pymol -y
 	conda install matplotlib
 ```
-
