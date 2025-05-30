@@ -1,4 +1,4 @@
-# AFanalysis
+# AFanalysis: AlphaFold2 Model Confidence Visualization Script
 
 Here, you can use the provided python script for the analysis of AlphaFold models, including both local predictions that produce .pkl files and ColabFold predictions that produce .json files storing quality evaluation scores. 
 
