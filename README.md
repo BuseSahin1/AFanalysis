@@ -37,13 +37,13 @@ This repository provides tools for analyzing and visualizing model confidence sc
 
 ## Scripts
 
-### `AF3-PAE.py`
+### `AF3-pae.py`
 
 Generates:
 - A **PAE matrix** using `_full_data_0.json`
 - A **pLDDT line plot** from the same JSON
 - Optional vertical chain break lines (if a PDB file is provided)
-
+- 
 **Usage:**
 ```
 	python AF3-PAE.py --data_file model_full_data_0.json --pdb_file model.pdb
