@@ -38,26 +38,23 @@ def read_plddt_from_pdb(pdb_file):
 def plot_plddt(residues, plddt, breaks, pdb_file):
     fig, ax = plt.subplots(figsize=(20, 10))
 
-    # pLDDT trace
-    ax.plot(residues, plddt, linewidth=5, color='blue', label='pLDDT')
+    # Draw a single uniform pLDDT trace
+    ax.plot(residues, plddt, linewidth=5, color='steelblue')
 
-    # chain‐break lines
+    # Chain-break vertical dashed lines
     for b in breaks:
         ax.axvline(x=b, color='darkred', linestyle='--', linewidth=2, alpha=0.5)
 
-    # gray dashed thresholds
-    for y in (50, 70, 90):
-        ax.axhline(y=y, color='gray', linestyle='--', linewidth=1.5)
-
-    ax.set_xlabel("Residue", fontsize=46, labelpad=10)
+    # Axes and styling
+    ax.set_xlabel("Residues", fontsize=46, labelpad=10)
     ax.set_ylabel("pLDDT", fontsize=46)
     ax.set_ylim(0, 100)
     ax.set_yticks(range(0, 101, 10))
     ax.tick_params(labelsize=28)
 
-    ax.legend(loc='upper right', fontsize=24)
     plt.tight_layout()
 
+    # Save output
     pdb_name = os.path.splitext(os.path.basename(pdb_file))[0]
     out_file = f"{pdb_name}_plddt.jpeg"
     fig.savefig(out_file, dpi=500, bbox_inches='tight')
@@ -66,7 +63,7 @@ def plot_plddt(residues, plddt, breaks, pdb_file):
     print(f"Saved pLDDT plot to: {out_file}")
 
 def main():
-    parser = argparse.ArgumentParser(description="Plot AF3 pLDDT directly from a PDB")
+    parser = argparse.ArgumentParser(description="Plot AF3 pLDDT from PDB with a single consistent color")
     parser.add_argument("--pdb_file", help="Path to your AF3 PDB (pLDDT in B-factor)", required=True)
     args = parser.parse_args()
 
@@ -75,4 +72,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
