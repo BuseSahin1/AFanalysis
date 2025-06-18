@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # Many thanks to ChatGPT for assisting me!
 
-
 """
-AFanalysis.py - Final version with --pdb_file support
+AF3-pae.py - PAE-only visualization from AlphaFold3 JSON files
 
-Generates PAE and pLDDT plots from AlphaFold .json files, 
-with chain boundary lines if a PDB file is provided.
+Generates a PAE heatmap from AlphaFold3 _full_data_0.json and 
+_summary_confidences_0.json. Adds chain boundary lines if a PDB file is provided.
 """
 
 import argparse
@@ -18,7 +17,7 @@ from Bio import PDB
 
 # --- Argument Parsing ---
 parser = argparse.ArgumentParser()
-parser.add_argument("--data_file", type=str, required=True, help="AlphaFold _full_data_0.json file")
+parser.add_argument("--data_file", type=str, required=True, help="AlphaFold3 _full_data_0.json file")
 parser.add_argument("--pdb_file", type=str, help="Optional PDB file for chain boundaries")
 args = parser.parse_args()
 
@@ -38,7 +37,6 @@ with open(summary_file, "r") as f:
     summary_data = json.load(f)
 
 pae_data = data.get("pae", [])
-plddt = data.get("atom_plddts", [])
 ptm = summary_data.get("ptm", 0.0)
 iptm = summary_data.get("iptm", 0.0)
 
@@ -60,17 +58,22 @@ if args.pdb_file:
 matrix = np.array(pae_data)
 fig, ax = plt.subplots(figsize=(7, 9))
 im = ax.imshow(matrix, cmap=plt.cm.Greens_r, vmin=0, vmax=30)
+
+# Add colorbar and labels
 cbar = ax.figure.colorbar(im, ax=ax, orientation='horizontal', pad=0.12)
 cbar.set_label(r"Expected position error (Ångströms)"
                "\n"
                "\n"
                f"ptm={ptm:.3f}  iptm={iptm:.3f}", fontsize=18)
 cbar.ax.tick_params(labelsize=18)
+
 plt.xlabel("Scored residue", fontsize=18)
 plt.ylabel("Aligned residue", fontsize=18)
+
 for tick in cbar.ax.get_yticklabels():
     ax.tick_params(labelsize=24)
 
+# Add chain boundary lines
 for resnum in cumulative_sum:
     ax.axvline(x=resnum, color='darkred', linestyle='--', linewidth=2, alpha=0.5)
     ax.axhline(y=resnum, color='darkred', linestyle='--', linewidth=2, alpha=0.5)
@@ -79,20 +82,4 @@ fig.tight_layout()
 fig.savefig(f"{output_file}_PAE.jpeg", dpi=500, bbox_inches='tight')
 plt.close()
 
-# --- Plot pLDDT Graph ---
-f = plt.figure(figsize=(20, 10))
-ax = plt.gca()
-residues = list(range(1, len(plddt) + 1))
-ax.set_xlabel("Residues", fontsize=46, labelpad=10)
-ax.set_ylabel("pLDDT", fontsize=46)
-ax.plot(residues, plddt)
-ax.tick_params(labelsize=28)
-ax.get_lines()[0].set_linewidth(5)
-
-for resnum in cumulative_sum:
-    ax.axvline(x=resnum, color='darkred', linestyle='--', linewidth=2, alpha=0.5)
-
-plt.savefig(f"{output_file}_Plddt.jpeg", dpi=500, bbox_inches='tight')
-plt.close()
-
-print(f"Saved: {output_file}_PAE.jpeg and {output_file}_Plddt.jpeg")
+print(f"Saved: {output_file}_PAE.jpeg")
